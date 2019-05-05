@@ -97,7 +97,7 @@ def main():
             , "srvkey": ServerInfo.srvkey
             , "bucket": ServerInfo.bucket
             }
-    server.server_launch(ServerInfo, event, os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'])
+    server.server_launch(ServerInfo, event, '', '')
 
     # run the server
     run()

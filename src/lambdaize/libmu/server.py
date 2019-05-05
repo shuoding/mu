@@ -12,8 +12,11 @@ import struct
 import sys
 import termios
 import time
+import urllib
+import urllib2
+import threading
 
-import pylaunch
+# import pylaunch
 import libmu.defs
 import libmu.machine_state
 import libmu.util
@@ -95,27 +98,41 @@ def _test_compute(kfDist, numParts):
 ###
 def server_launch(server_info, event, akid, secret):
     if event.get('addr') is None:
+        event['addr'] = '172.17.0.1'
         # figure out what the IP address of the interface talking to AWS is
         # NOTE if you have different interfaces routing to different regions
         #      this won't work. I'm assuming that's unlikely.
-        testsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        testsock.connect(("lambda." + server_info.regions[0] + ".amazonaws.com", 443))
-        event['addr'] = testsock.getsockname()[0]
-        testsock.close()
+        # testsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # testsock.connect(("lambda." + server_info.regions[0] + ".amazonaws.com", 443))
+        # event['addr'] = testsock.getsockname()[0]
+        # testsock.close()
 
     pid = os.fork()
     if pid == 0:
         # pylint: disable=no-member
         # (pylint can't "see" into C modules)
+        def launch(ev):
+            url = 'http://localhost:8080/runLambda/lambda_function_template'
+            data = urllib.urlencode(ev)
+            content = urllibs.urlopen(url = url, data = data).read()
+            print content
         total_parts = server_info.num_parts + getattr(server_info, 'overprovision', 0)
-        pylaunch.launchpar(total_parts, server_info.lambda_function, akid, secret, json.dumps(event), server_info.regions)
+        thread_list = []
+        for i in range(total_parts):
+            t = threading.Thread(target = launch, args = (event, ))
+            thread_list.append(t)
+            t.start()
+        for t in thread_list:
+            t.join()
         sys.exit(0)
+        # pylaunch.launchpar(total_parts, server_info.lambda_function, akid, secret, json.dumps(event), server_info.regions)
+        # sys.exit(0)
 
 ###
 #  set up server listen sock
 ###
 def setup_server_listen(server_info):
-    return libmu.util.listen_socket('0.0.0.0', server_info.port_number, server_info.cacert, server_info.srvcrt, server_info.srvkey, server_info.num_parts + 10)
+    return libmu.util.listen_socket('172.17.0.1', server_info.port_number, server_info.cacert, server_info.srvcrt, server_info.srvkey, server_info.num_parts + 10)
 
 ###
 #  server mainloop

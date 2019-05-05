@@ -319,4 +319,4 @@ def lambda_handler(event, _):
     if vals.get('rm_tmpdir') and vals.get('_tmpdir') is not None:
         shutil.rmtree(vals.get('_tmpdir'))
 
-cmdstring = ''
+cmdstring = '/handler/png2y4m -i -d -o ##OUTFILE## ##INFILE##'
