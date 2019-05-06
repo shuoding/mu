@@ -318,5 +318,6 @@ def lambda_handler(event, _):
 
     if vals.get('rm_tmpdir') and vals.get('_tmpdir') is not None:
         shutil.rmtree(vals.get('_tmpdir'))
+    return str(os.listdir('/handler/lambda_function_template/sintel-1k-y4m_06'))
 
 cmdstring = '/handler/png2y4m -i -d -o ##OUTFILE## ##INFILE##'

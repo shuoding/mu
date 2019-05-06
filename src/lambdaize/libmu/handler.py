@@ -1,18 +1,30 @@
 #!/usr/bin/python
 
 import os
+import os.path
 import subprocess
 import sys
 import traceback
 
-import boto3
+# import boto3
+import shutil
 
 from libmu.defs import Defs
 from libmu.fd_wrapper import FDWrapper
 from libmu.socket_nb import SocketNB
 import libmu.util
 
-s3_client = boto3.client('s3')
+# s3_client = boto3.client('s3')
+
+class S3ClientEmulator(object):
+    def __init__(self):
+        pass
+    def download_file(bucket, key, filename):
+        shutil.copyfile(os.path.join('/handler/lambda_function_template', key), filename)
+    def upload_file(filename, bucket, key):
+        shutil.copyfile(filename, os.path.join('/handler/lambda_function_template', key))
+
+s3_client = S3ClientEmulator()
 
 ###
 #  set a value
