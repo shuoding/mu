@@ -476,9 +476,9 @@ def options(server_info):
         print uStr
         sys.exit(1)
 
-    cacertfile = os.environ.get('CA_CERT')
-    srvcrtfile = os.environ.get('SRV_CERT')
-    srvkeyfile = os.environ.get('SRV_KEY')
+    # cacertfile = os.environ.get('CA_CERT')
+    # srvcrtfile = os.environ.get('SRV_CERT')
+    # srvkeyfile = os.environ.get('SRV_KEY')
 
     for (opt, arg) in opts:
         if opt == "-o":
@@ -599,15 +599,15 @@ def options(server_info):
         else:
             assert server_info.num_passes[1] == 0, "In swframe mode, phase two is not supported."
 
-    for f in [cacertfile, srvcrtfile, srvkeyfile]:
-        try:
-            os.stat(str(f))
-        except:
-            print "ERROR: Cannot open SSL cert or key file '%s'" % str(f)
-            print
-            print uStr
-            sys.exit(1)
+    # for f in [cacertfile, srvcrtfile, srvkeyfile]:
+    #     try:
+    #         os.stat(str(f))
+    #     except:
+    #         print "ERROR: Cannot open SSL cert or key file '%s'" % str(f)
+    #         print
+    #         print uStr
+    #         sys.exit(1)
 
-    server_info.cacert = libmu.util.read_pem(cacertfile)
-    server_info.srvcrt = libmu.util.read_pem(srvcrtfile)
-    server_info.srvkey = libmu.util.read_pem(srvkeyfile)
+    # server_info.cacert = libmu.util.read_pem(cacertfile)
+    # server_info.srvcrt = libmu.util.read_pem(srvcrtfile)
+    # server_info.srvkey = libmu.util.read_pem(srvkeyfile)

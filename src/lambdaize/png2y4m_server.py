@@ -13,7 +13,7 @@ class ServerInfo(object):
     num_parts = 1
     lambda_function = "png2y4m"
     regions = ["us-east-1"]
-    bucket = "excamera-us-east-1"
+    bucket = "sdingbucketformu"
     in_format = "png16"
     out_file = None
     profiling = None
