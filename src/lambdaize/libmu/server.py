@@ -111,10 +111,10 @@ def server_launch(server_info, event, akid, secret):
     if pid == 0:
         # pylint: disable=no-member
         # (pylint can't "see" into C modules)
-        def launch(ev):
+        def launch(env):
             url = 'http://localhost:8080/runLambda/lambda_function_template'
-            data = urllib.urlencode(ev)
-            content = urllibs.urlopen(url = url, data = data).read()
+            data = urllib.urlencode(env)
+            content = urllib2.urlopen(url = url, data = data).read()
             print content
         total_parts = server_info.num_parts + getattr(server_info, 'overprovision', 0)
         thread_list = []
@@ -587,11 +587,11 @@ def options(server_info):
         print uStr
         sys.exit(1)
 
-    if hasattr(server_info, 'lambda_function') and (os.environ.get("AWS_ACCESS_KEY_ID") is None or os.environ.get("AWS_SECRET_ACCESS_KEY") is None):
-        print "ERROR: You must set the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars"
-        print
-        print uStr
-        sys.exit(1)
+    # if hasattr(server_info, 'lambda_function') and (os.environ.get("AWS_ACCESS_KEY_ID") is None or os.environ.get("AWS_SECRET_ACCESS_KEY") is None):
+    #    print "ERROR: You must set the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars"
+    #    print
+    #    print uStr
+    #    sys.exit(1)
 
     if hasattr(server_info, 'num_passes'):
         if getattr(server_info, 'keyframe_distance', None):
