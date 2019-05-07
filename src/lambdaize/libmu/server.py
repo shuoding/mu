@@ -112,7 +112,7 @@ def server_launch(server_info, event, akid, secret):
         # pylint: disable=no-member
         # (pylint can't "see" into C modules)
         def launch(env):
-            url = 'http://localhost:8080/runLambda/lambda_function_template'
+            url = 'http://localhost:8080/runLambda/muapp'
             data = urllib.urlencode(env)
             content = urllib2.urlopen(url = url, data = data).read()
             print content
