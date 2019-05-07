@@ -15,6 +15,7 @@ import time
 import urllib
 import urllib2
 import threading
+import subprocess
 
 # import pylaunch
 import libmu.defs
@@ -112,10 +113,8 @@ def server_launch(server_info, event, akid, secret):
         # pylint: disable=no-member
         # (pylint can't "see" into C modules)
         def launch(env):
-            url = 'http://localhost:8080/runLambda/muapp'
-            data = urllib.urlencode(env)
-            content = urllib2.urlopen(url = url, data = data).read()
-            print content
+            ret = subprocess.Popen(['curl', '-X', 'POST', 'localhost:8080/runLambda/muapp', '-d', str(env)], stdout = subprocess.PIPE, universal_newlines = True)
+            print ret.communicate()[0]
         total_parts = server_info.num_parts + getattr(server_info, 'overprovision', 0)
         thread_list = []
         for i in range(total_parts):
