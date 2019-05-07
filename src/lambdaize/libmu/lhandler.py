@@ -260,7 +260,7 @@ def do_close_connect(_, vals):
     return False
 
 ###
-#  dispatch to handler functions
+#  dispatch to lhandler functions
 ###
 message_types = { 'set:': do_set
                 , 'seti:': do_seti

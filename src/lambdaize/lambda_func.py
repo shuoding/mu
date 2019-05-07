@@ -8,7 +8,7 @@ import socket
 import tempfile
 import zlib
 
-from libmu import SocketNB, Defs, util, handler
+from libmu import SocketNB, Defs, util, lhandler
 
 ###
 #  send state file to stsock
@@ -75,7 +75,7 @@ def get_arwsocks(vals):
                  or (isinstance(s, SocketNB) and s.sock is not None) ]
 
     # wsocks is all rsocks that indicate they want to be written
-    wsocks = [ s for s in asocks if isinstance(s, SocketNB) and (s.ssl_write or s.want_write) ]
+    wsocks = [ s for s in asocks if isinstance(s, SocketNB) and (s.want_write) ]
 
     return (asocks, rsocks, wsocks)
 
@@ -227,7 +227,7 @@ def handler(event):
 
     # default: just run the command and exit
     if mode == 0:
-        return handler.do_run('', {'event': event})
+        return lhandler.do_run('', {'event': event})
 
     s = util.connect_socket(addr, port, cacert, srvcrt, srvkey)
     if not isinstance(s, SocketNB):
@@ -265,7 +265,7 @@ def handler(event):
         break_outer = False
         while vals['cmdsock'].want_handle and not break_outer:
             nxt = vals['cmdsock'].dequeue()
-            break_outer = handler.handle_message(nxt, vals)
+            break_outer = lhandler.handle_message(nxt, vals)
 
         if break_outer:
             break
@@ -315,6 +315,6 @@ def handler(event):
 
     if vals.get('rm_tmpdir') and vals.get('_tmpdir') is not None:
         shutil.rmtree(vals.get('_tmpdir'))
-    return str(os.listdir('/handler/muapp/sintel-1k-y4m_06'))
+    return ''
 
 cmdstring = '/handler/png2y4m -i -d -o ##OUTFILE## ##INFILE##'

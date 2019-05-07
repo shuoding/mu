@@ -3,7 +3,7 @@
 import time
 
 from libmu.defs import Defs
-import libmu.handler
+import libmu.lhandler
 from libmu.socket_nb import SocketNB
 import libmu.util
 
@@ -219,7 +219,7 @@ class CommandListState(MultiPassState):
         # explicit expect if given, otherwise set expect based on previous command
         self.expects = [ self.commandlist[0][0] if isinstance(self.commandlist[0], tuple) else "OK" ]
         self.commands = [ cmd[1] if isinstance(cmd, tuple) else cmd for cmd in self.commandlist ]
-        pre_expects = [ cmd[0] if isinstance(cmd, tuple) else libmu.handler.expected_response(pc)
+        pre_expects = [ cmd[0] if isinstance(cmd, tuple) else libmu.lhandler.expected_response(pc)
                         for (cmd, pc) in zip(self.commandlist[1:], self.commands[:-1]) ]
 
         if self.pipelined:
