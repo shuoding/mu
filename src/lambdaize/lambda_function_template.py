@@ -8,8 +8,6 @@ import socket
 import tempfile
 import zlib
 
-from OpenSSL import SSL
-
 from libmu import SocketNB, Defs, util, handler
 
 ###
@@ -74,7 +72,6 @@ def get_arwsocks(vals):
     # rsocks is all objects that we could select upon
     rsocks = [ s for s in asocks
                  if isinstance(s, socket.SocketType)
-                 or isinstance(s, SSL.Connection)
                  or (isinstance(s, SocketNB) and s.sock is not None) ]
 
     # wsocks is all rsocks that indicate they want to be written
@@ -185,7 +182,7 @@ make_retrievestring = lambda m, v: make_urstring(m, v, 'inkey', 'targfile')
 ###
 #  lambda enters here
 ###
-def lambda_handler(event, _):
+def handler(event):
     Defs.cmdstring = cmdstring
     Defs.make_cmdstring = staticmethod(make_cmdstring)
     Defs.make_retrievestring = staticmethod(make_retrievestring)

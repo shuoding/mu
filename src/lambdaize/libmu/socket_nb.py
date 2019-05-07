@@ -4,7 +4,7 @@ import collections
 import socket
 import traceback
 
-from OpenSSL import SSL
+# from OpenSSL import SSL
 
 from libmu.defs import Defs
 
@@ -22,8 +22,8 @@ class SocketNB(object):
             self.send_queue = sock.send_queue
             self.recv_buf = sock.recv_buf
             self.send_buf = sock.send_buf
-            self.ssl_write = sock.ssl_write
-            self.handshaking = sock.handshaking
+            # self.ssl_write = sock.ssl_write
+            # self.handshaking = sock.handshaking
 
         else:
             self.sock = sock
@@ -34,8 +34,8 @@ class SocketNB(object):
             self.send_queue = collections.deque()
             self.recv_buf = ""
             self.send_buf = None
-            self.ssl_write = None
-            self.handshaking = False
+            # self.ssl_write = None
+            # self.handshaking = False
 
         self._fileno = sock.fileno()
 
@@ -60,10 +60,10 @@ class SocketNB(object):
             print "CLOSING SOCKET %s" % traceback.format_exc()
 
         try:
-            if isinstance(self.sock, SSL.Connection):
-                self.sock.shutdown()
-            else:
-                self.sock.shutdown(socket.SHUT_RDWR)
+            # if isinstance(self.sock, SSL.Connection):
+            #     self.sock.shutdown()
+            # else:
+            self.sock.shutdown(socket.SHUT_RDWR)
             self.sock.close()
         except:
             pass
@@ -71,7 +71,7 @@ class SocketNB(object):
         self.sock = None
 
     def _fill_recv_buf(self):
-        self.ssl_write = None
+        # self.ssl_write = None
         start_len = len(self.recv_buf)
         while True:
             try:
@@ -80,12 +80,12 @@ class SocketNB(object):
                     break
                 else:
                     self.recv_buf += nbuf
-            except SSL.WantReadError:
-                start_len = -1
-                break
-            except SSL.WantWriteError:
-                self.ssl_write = True
-                break
+            # except SSL.WantReadError:
+            #     start_len = -1
+            #     break
+            # except SSL.WantWriteError:
+            #     self.ssl_write = True
+            #     break
             except:
                 break
 
@@ -96,8 +96,8 @@ class SocketNB(object):
         if self.sock is None:
             return
 
-        if self.handshaking:
-            return self.do_handshake()
+        # if self.handshaking:
+        #    return self.do_handshake()
 
         self._fill_recv_buf()
         if len(self.recv_buf) == 0:
@@ -145,8 +145,8 @@ class SocketNB(object):
 
     def _fill_send_buf(self):
         self.send_buf = '' if self.send_buf is None else self.send_buf
-        if self.ssl_write is True:
-            return
+        # if self.ssl_write is True:
+        #    return
 
         # if we have multiple messages enqueued, put them all in the buffer
         while len(self.send_queue) > 0:
@@ -158,14 +158,14 @@ class SocketNB(object):
     def _send_raw(self):
         last_slen = None
         while True:
-            self.ssl_write = None
+            # self.ssl_write = None
             slen = 0
             try:
                 slen = self.sock.send(self.send_buf)
-            except (socket.error, OSError, SSL.ZeroReturnError, SSL.SysCallError, SSL.WantReadError):
+            except (socket.error, OSError): # , SSL.ZeroReturnError, SSL.SysCallError, SSL.WantReadError):
                 break
-            except SSL.WantWriteError:
-                self.ssl_write = True
+            # except SSL.WantWriteError:
+            #    self.ssl_write = True
 
             if slen == 0 and last_slen == 0:
                 break
@@ -180,8 +180,8 @@ class SocketNB(object):
         if self.sock is None:
             return
 
-        if self.handshaking:
-            return self.do_handshake()
+        # if self.handshaking:
+        #    return self.do_handshake()
 
         self._fill_send_buf()
         if self.send_buf is not None:
@@ -191,18 +191,18 @@ class SocketNB(object):
 
     def do_handshake(self):
         self.update_flags()
-        if not isinstance(self.sock, SSL.Connection):
-            return
+        # if not isinstance(self.sock, SSL.Connection):
+        return
 
-        self.handshaking = True
-        self.ssl_write = None
-        try:
-            self.sock.do_handshake()
-        except SSL.WantWriteError:
-            self.ssl_write = True
-        except SSL.WantReadError:
-            pass
-        except SSL.Error:
-            self.close()
-        else:
-            self.handshaking = False
+        # self.handshaking = True
+        # self.ssl_write = None
+        # try:
+        #     self.sock.do_handshake()
+        # except SSL.WantWriteError:
+        #     self.ssl_write = True
+        # except SSL.WantReadError:
+        #     pass
+        # except SSL.Error:
+        #     self.close()
+        # else:
+        #     self.handshaking = False
