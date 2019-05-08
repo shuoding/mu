@@ -155,7 +155,7 @@ def server_main_loop(states, constructor, server_info):
                 if not isinstance(st, libmu.machine_state.TerminalState):
                     val = val | select.POLLIN
 
-                if st.ssl_write or st.want_write:
+                if st.want_write:
                     val = val | select.POLLOUT
 
                 if val != ret[idx]:
