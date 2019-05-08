@@ -1,0 +1,13 @@
+To run png2y4m using mu on OpenLambda, please follow these steps:
+
+1. Please follow the instructions in https://github.com/excamera/mu to download and build daala_tools, which contains the png2y4m tool. The compilation of daala_tools needs Ogg, which is available in https://github.com/xiph/ogg
+
+2. Please follow the instructions in https://github.com/open-lambda/open-lambda to build OpenLambda, create a cluster (my-cluster), and start a local worker.
+
+3. Before running png2y4m, please copy the PNG files to the directory s3-server-emulator/sintel-1k-png16, and then start the S3 emulator by running the following command under the directory s3-server-emulator.
+	
+	python s3emu.py &
+
+4. Finally, please create a new directory muapp and copy lambda_func.py, libmu, and png2y4m (the binary file obtained in step 1) to muapp. Then you can follow the instructions in https://github.com/open-lambda/open-lambda to copy muapp to my-cluster/registry/muapp, and start the coordinating server by the following command.
+
+	./png2y4m_server.py -n 5 -l muapp
