@@ -113,7 +113,7 @@ def server_launch(server_info, event, akid, secret):
         # pylint: disable=no-member
         # (pylint can't "see" into C modules)
         def launch(env):
-            ret = subprocess.Popen(['curl', '-X', 'POST', 'localhost:8080/runLambda/muapp', '-d', str(env)], stdout = subprocess.PIPE, universal_newlines = True)
+            ret = subprocess.Popen(['curl', '-X', 'POST', 'localhost:8080/runLambda/muapp', '-d', json.dumps(env)], stdout = subprocess.PIPE, universal_newlines = True)
             print ret.communicate()[0]
         total_parts = server_info.num_parts + getattr(server_info, 'overprovision', 0)
         thread_list = []
