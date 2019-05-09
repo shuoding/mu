@@ -4,7 +4,7 @@ To run png2y4m using mu on OpenLambda, please follow these steps:
 
 2. Please follow the instructions in https://github.com/open-lambda/open-lambda to build OpenLambda, create a cluster (my-cluster), and start a local worker.
 
-3. Before running png2y4m, please create directories sintel-1k-png16 and sintel-1k-y4m_06 under the directory s3-server-emulator, copy PNG files to s3-server-emulator/sintel-1k-png16, and start the S3 emulator by running the following command under s3-server-emulator.
+3. Before running png2y4m, please create directories sintel-1k-png16 and sintel-1k-y4m_06 under the directory s3-server-emulator, copy PNG files to s3-server-emulator/sintel-1k-png16, and start the S3 emulator by running the following command under s3-server-emulator. (Running this program from other directories, such as running 'python s3-server-emulator/s3emu.py &' under the lambdaize directory, may cause path problems.)
 	
 	python s3emu.py &
 
