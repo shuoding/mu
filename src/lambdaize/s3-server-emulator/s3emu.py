@@ -1,5 +1,6 @@
 import socket
 import threading
+import os.path
 
 def handler(cli_s, cli_addr):
     request = cli_s.recv(1048576)
@@ -11,6 +12,7 @@ def handler(cli_s, cli_addr):
             with open(key, 'rb') as f:
                 cli_s.send('Y'.encode('utf-8') + f.read())
         except:
+            print('>>>>>> S3EMU >>>>>> error occurs when reading and sending file ' + os.path.abspath(key))
             cli_s.send('N'.encode('utf-8'))
     elif flag == 'U':
         key = ''
@@ -22,9 +24,10 @@ def handler(cli_s, cli_addr):
             with open(key, 'wb') as f:
                 f.write(requestBody)
         except:
+            print('>>>>>> S3EMU >>>>>> error occurs when writing file ' + os.path.abspath(key))
             pass
     else:
-        print('unknown request')
+        print('>>>>>> S3EMU >>>>>> unknown request')
 
 def main():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
